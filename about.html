@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Julian — reachjulian</title>
+<meta name="description" content="Julian is an 18-year entrepreneur with 12 years in home goods and health & wellness, focused on operations and marketing efficiency. He buys and keeps Texas businesses running.">
+<meta name="robots" content="index,follow">
+
+<!-- ============================================================
+     Fill in / swap where noted:
+       [Effective date] not needed here.
+       PORTRAIT: replace the .monogram block with a real photo:
+         <img class="portrait" src="julian.jpg" alt="Julian">
+       Keep claims truthful — don't add businesses or numbers that
+       aren't real.
+     Links assume the homepage is deployed as index.html.
+     ============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Spline+Sans+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --limestone:#F3EEE4; --paper:#FBF8F1; --ink:#22272F; --ink-soft:#5B626C;
+    --bluebonnet:#34407B; --bluebonnet-hi:#4557A7; --wheat:#C79A3A;
+    --hairline:#E2DAC9; --hairline-2:#D8CEB9; --ok:#3B6B4A;
+    --font-display:"Archivo",system-ui,sans-serif;
+    --font-body:"Newsreader",Georgia,serif;
+    --font-mono:"Spline Sans Mono",ui-monospace,monospace;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } *{ transition:none!important; } }
+  body{ margin:0; background:var(--limestone); color:var(--ink); font-family:var(--font-body); font-size:19px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  h1,h2{ font-family:var(--font-display); font-weight:800; line-height:1.08; letter-spacing:-0.01em; margin:0; }
+  a{ color:var(--bluebonnet); }
+  .wrap{ max-width:720px; margin:0 auto; padding:0 24px; }
+  .wrap-wide{ max-width:1000px; margin:0 auto; padding:0 24px; }
+  :focus-visible{ outline:3px solid var(--wheat); outline-offset:2px; }
+
+  .eyebrow{ font-family:var(--font-display); font-weight:600; font-size:12.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--bluebonnet); display:inline-flex; align-items:center; gap:8px; }
+  .eyebrow::before{ content:""; width:22px; height:2px; background:var(--wheat); display:inline-block; }
+  .mark{ background:linear-gradient(transparent 62%, rgba(199,154,58,.38) 62%); }
+
+  header{ position:sticky; top:0; z-index:50; background:rgba(243,238,228,.86); backdrop-filter:blur(8px); border-bottom:1px solid var(--hairline); }
+  .bar{ max-width:1080px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:20px; letter-spacing:-0.02em; color:var(--ink); text-decoration:none; }
+  .brand span{ color:var(--bluebonnet); }
+  .brand small{ font-family:var(--font-mono); font-weight:500; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); margin-left:10px; }
+  .bar nav{ display:flex; align-items:center; gap:22px; }
+  .bar nav a.navlink{ font-family:var(--font-display); font-weight:500; font-size:15px; color:var(--ink); text-decoration:none; }
+  .bar nav a.navlink:hover{ color:var(--bluebonnet); }
+  @media (max-width:560px){ .bar nav a.navlink{ display:none; } }
+  .btn{ font-family:var(--font-display); font-weight:600; font-size:15px; background:var(--bluebonnet); color:#fff; text-decoration:none; padding:11px 20px; border-radius:2px; border:1px solid var(--bluebonnet); display:inline-block; }
+  .btn:hover{ background:var(--bluebonnet-hi); }
+  .btn.lg{ font-size:17px; padding:15px 28px; }
+
+  /* hero: portrait + intro */
+  .about-hero{ padding:60px 0 40px; }
+  .about-grid{ display:grid; grid-template-columns:240px 1fr; gap:40px; align-items:center; }
+  @media (max-width:680px){ .about-grid{ grid-template-columns:1fr; gap:28px; } }
+  .portrait, .monogram{ width:240px; height:280px; border-radius:4px; object-fit:cover; }
+  @media (max-width:680px){ .portrait, .monogram{ width:180px; height:210px; } }
+  .monogram{ background:var(--bluebonnet); color:var(--wheat); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:96px; box-shadow:0 18px 40px -28px rgba(34,39,47,.7); }
+  .about-hero h1{ font-size:clamp(34px,6vw,54px); margin:14px 0 0; }
+  .about-hero .lede{ font-size:clamp(19px,2.3vw,22px); margin:20px 0 0; }
+  .about-hero .lede b{ font-weight:500; }
+
+  /* stat strip */
+  .stats{ border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline); }
+  .stats .grid{ display:grid; grid-template-columns:repeat(4,1fr); }
+  @media (max-width:680px){ .stats .grid{ grid-template-columns:1fr 1fr; } }
+  .stat{ padding:26px 20px; border-left:1px solid var(--hairline); }
+  .stat:first-child{ border-left:none; }
+  @media (max-width:680px){ .stat:nth-child(odd){ border-left:none; } .stat:nth-child(n+3){ border-top:1px solid var(--hairline); } }
+  .stat .num{ font-family:var(--font-mono); font-weight:600; font-size:30px; color:var(--bluebonnet); line-height:1; }
+  .stat .lbl{ font-size:16px; color:var(--ink-soft); margin-top:8px; }
+
+  /* prose */
+  main{ padding:56px 0 30px; }
+  .sec{ margin-bottom:46px; }
+  .sec h2{ font-size:24px; margin:0 0 14px; }
+  .sec p{ margin:0 0 16px; }
+  .sec p:last-child{ margin-bottom:0; }
+
+  /* cta */
+  .cta{ background:var(--ink); color:var(--limestone); border-radius:5px; padding:44px 40px; text-align:center; margin:10px 0 60px; }
+  .cta h2{ color:var(--limestone); font-size:clamp(24px,4vw,34px); }
+  .cta p{ color:#c4c8cf; max-width:460px; margin:14px auto 26px; }
+
+  footer{ background:var(--ink); color:#9aa0a8; padding:34px 0 44px; border-top:1px solid #333a44; }
+  footer .fwrap{ max-width:1080px; margin:0 auto; padding:0 24px; display:flex; flex-wrap:wrap; gap:16px 28px; align-items:center; justify-content:space-between; }
+  footer .brand{ color:var(--limestone); }
+  footer .brand span{ color:var(--wheat); }
+  footer .fnote{ font-family:var(--font-mono); font-size:12px; letter-spacing:0.04em; }
+  footer a{ color:#c4c8cf; }
+  footer .flinks{ display:flex; gap:24px; }
+  footer .flinks a{ font-family:var(--font-display); font-weight:500; font-size:14px; color:#c4c8cf; text-decoration:none; }
+  footer .flinks a:hover{ color:var(--wheat); }
+  @media (max-width:640px){ footer .fwrap{ flex-direction:column; align-items:flex-start; gap:18px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="index.html">reach<span>julian</span><small>Texas</small></a>
+    <nav>
+      <a class="navlink" href="index.html">← Home</a>
+      <a class="btn" href="index.html#contact">Start the conversation</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="about-hero">
+  <div class="wrap-wide">
+    <div class="about-grid">
+      <!-- Swap this monogram for a real photo when you have one:
+           <img class="portrait" src="julian.jpg" alt="Julian"> -->
+      <div class="monogram" aria-hidden="true">J</div>
+      <div>
+        <span class="eyebrow">About</span>
+        <h1>I&rsquo;m Julian.</h1>
+        <p class="lede"><b>I&rsquo;ve spent 18 years building businesses</b> &mdash; the last 12 of them in home goods and health &amp; wellness. Now I buy established Texas businesses and keep them running <span class="mark">right here</span>, with the people and the name their owners built.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="wrap-wide">
+    <div class="grid">
+      <div class="stat"><div class="num">18</div><div class="lbl">Years building businesses</div></div>
+      <div class="stat"><div class="num">12</div><div class="lbl">Years in home goods &amp; health &amp; wellness</div></div>
+      <div class="stat"><div class="num">2</div><div class="lbl">Focus areas: operations &amp; marketing</div></div>
+      <div class="stat"><div class="num">TX</div><div class="lbl">Texas-based, buying Texas</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROSE -->
+<main>
+<div class="wrap">
+
+  <div class="sec">
+    <h2>My background</h2>
+    <p>I&rsquo;m an operator at heart. Over 18 years as an entrepreneur, I&rsquo;ve spent the last dozen deep in home goods and health &amp; wellness &mdash; categories that live and die on repeat customers and trust. I learned the parts of a business that actually move the needle: tight operations and marketing that earns its keep.</p>
+    <p>That&rsquo;s the lens I bring to every business I look at. Not &ldquo;where can we cut,&rdquo; but &ldquo;where is this already working, and how do we help it run better.&rdquo;</p>
+  </div>
+
+  <div class="sec">
+    <h2>Why I buy businesses like yours</h2>
+    <p>Plenty of buyers are financial engineers &mdash; they buy to strip a business down and move on. I&rsquo;m the opposite. I buy businesses to <span class="mark">own and run them</span>, and I grow them the way I always have: by sharpening operations and making the marketing more efficient, not by gutting the team that made the place work.</p>
+    <p>If you built something with loyal, repeat customers, that&rsquo;s exactly what I&rsquo;m looking for &mdash; and exactly what I want to protect.</p>
+  </div>
+
+  <div class="sec">
+    <h2>Why Texas</h2>
+    <p>I&rsquo;ve lived in Texas for 20 years, and my wife is a sixth-generation Texan. This is home. I&rsquo;d rather see a good Texas business stay in Texan hands than get absorbed by a fund three states away that&rsquo;s never set foot in your town.</p>
+  </div>
+
+  <div class="sec">
+    <h2>What I&rsquo;m like to work with</h2>
+    <p>Direct, honest, and confidential. You deal with me &mdash; not a pipeline of associates. I&rsquo;ll tell you straight whether we&rsquo;re a fit, I&rsquo;ll move at a pace that respects your life&rsquo;s work, and nothing you share ever gets listed or passed around.</p>
+  </div>
+
+  <div class="cta">
+    <h2>Let&rsquo;s have a quiet conversation.</h2>
+    <p>If you&rsquo;re thinking about selling &mdash; even if you&rsquo;re just starting to &mdash; reach out. No pressure, no obligation.</p>
+    <a class="btn lg" href="index.html#contact">Start the conversation</a>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <div class="fwrap">
+    <a class="brand" href="index.html">reach<span>julian</span></a>
+    <nav class="flinks">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Me</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </nav>
+    <div class="fnote">Texas · Confidential inquiries only · <a href="mailto:julian@reachjulian.com">julian@reachjulian.com</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
