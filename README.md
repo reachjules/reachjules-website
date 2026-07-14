@@ -14,7 +14,8 @@ no framework — just upload the files. Hosted free on GitHub Pages.
 | `404.html` | Friendly "page not found" page |
 | `CNAME` | Tells GitHub your custom domain is `reachjulian.com` |
 | `.nojekyll` | Tells GitHub to serve the files as-is (skip Jekyll) |
-| `slack-relay-worker.js` | The tiny free "server" that sends form entries to Slack. **Not part of the website** — it gets pasted into Cloudflare (see step 4). |
+| `google-apps-script.gs` | **Recommended** lead handler: drops each submission into a Google Sheet (+ optional Slack ping). **Not part of the website** — it gets pasted into Google Apps Script (see step 4). |
+| `slack-relay-worker.js` | Alternative Slack-only handler. **Not part of the website** — it gets pasted into Cloudflare (see step 4). |
 
 ---
 
@@ -68,37 +69,45 @@ Type: CNAME   Name: www   Value: <your-username>.github.io
 DNS can take anywhere from a few minutes to 24 hours. Once it resolves, go back to
 **Settings -> Pages** and tick **Enforce HTTPS**. Done — `https://reachjulian.com` is live.
 
-## 4. Send the form to Slack
+## 4. Where the leads go
 
 The form works the moment the site is up: until you finish this step, submitting
-opens a pre-filled email to you, so no lead is ever lost. To get the nicer Slack
-ping, do the one-time setup in **`slack-relay-worker.js`** (step-by-step at the top
-of that file). The short version:
+opens a pre-filled email to you, so no lead is ever lost. To capture leads properly,
+pick one of these (you only need one).
 
-1. Make a Slack **Incoming Webhook** for your `#leads` channel.
-2. Create a free **Cloudflare Worker**, paste in `slack-relay-worker.js`, and add
-   your webhook as an encrypted variable named `SLACK_WEBHOOK_URL`.
-3. Copy your Worker URL and open `index.html`. Near the bottom, in `LEAD_CONFIG`:
+### Recommended: Google Sheet (+ optional Slack) — `google-apps-script.gs`
+
+Because you already use Google, this is the simplest path and gives you a running
+spreadsheet of every lead. The same script can also ping Slack. Full step-by-step is
+at the top of **`google-apps-script.gs`**; the short version:
+
+1. Create a blank **Google Sheet**.
+2. In it, open **Extensions -> Apps Script**, paste in `google-apps-script.gs`.
+   (Optional: paste a Slack Incoming Webhook URL into the `SLACK_WEBHOOK_URL` line to
+   get Slack pings too.)
+3. **Deploy -> New deployment -> Web app**, *Execute as: Me*, *Who has access: Anyone*.
+   Authorize, then copy the **Web app URL**.
+4. In `index.html`, near the bottom, set:
    ```js
    var LEAD_CONFIG = {
-     mode: "relay",
-     relayUrl: "https://reachjulian-slack.<you>.workers.dev",
+     mode: "apps-script",
+     appsScriptUrl: "PASTE_THE_WEB_APP_URL_HERE",
      ...
    };
    ```
-4. Re-upload `index.html`. New leads now land in Slack instantly.
+5. Re-upload `index.html`. Every submission now adds a row to your Sheet (and pings
+   Slack if you added the webhook).
 
-**Why the relay instead of posting to Slack directly?** Browsers can't reliably
-post straight to a Slack webhook (Slack blocks it), and doing so would expose your
-webhook publicly for spammers. The Worker keeps the webhook private, confirms
-delivery, and only accepts submissions from your domain. It's free.
+### Alternative: Slack only — `slack-relay-worker.js`
 
-*Prefer the quick-and-dirty route anyway?* Set `mode: "slack-direct"` and paste your
-webhook into `slackWebhook`. It'll usually work, but the webhook is visible in the
-page source and delivery can't be confirmed. The relay is the better call.
+If you'd rather not use a Sheet and just want Slack, use the Cloudflare Worker in
+`slack-relay-worker.js` (setup at the top of that file), then set `mode: "relay"` and
+`relayUrl` in `LEAD_CONFIG`. It keeps your webhook private and confirms delivery.
 
-*Want email instead of / in addition to Slack?* There's a note at the bottom of the
-Worker file — easy to add.
+**Note on posting to Slack directly from the page:** browsers can't reliably do it
+(Slack blocks cross-origin requests) and it would expose your webhook to spammers —
+which is why both recommended paths use a tiny free middle step. A `slack-direct`
+mode exists in the config for the brave, but it's not advised.
 
 ---
 

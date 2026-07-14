@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>reachjulian — Sell your Texas business to a neighbor, not a spreadsheet</title>
-<meta name="description" content="Julian buys established Texas retail health businesses with repeat customers ($1M–$3M revenue) and keeps them running locally. Confidential, direct, no brokers.">
+<meta name="description" content="Julian buys established Texas home-service businesses with repeat customers ($1M–$7M revenue) and keeps them running locally. Confidential, direct, no brokers.">
 
 <!-- ============================================================
      TO GO LIVE, JULIAN:
@@ -233,7 +233,7 @@
   <div class="wrap">
     <span class="eyebrow">For Texas owners thinking about selling</span>
     <h1>Sell to a neighbor,<br>not a spreadsheet.</h1>
-    <p class="lede"><b>I'm Julian.</b> I buy established Texas main-street businesses — and I keep them running <span class="mark">right here</span>, with the name and the people you built. If you're ready to sell, let's have a quiet conversation.</p>
+    <p class="lede"><b>I'm Julian.</b> I buy established Texas home-service businesses — and I keep them running <span class="mark">right here</span>, with the name and the people you built. If you're ready to sell, let's have a quiet conversation.</p>
     <div class="cta-row">
       <a class="btn lg" href="#contact">Start the conversation</a>
       <a class="btn ghost lg" href="#fit">See if we're a fit</a>
@@ -272,9 +272,9 @@
       <p>I focus so I can be a serious, fast buyer — not a tire-kicker. Here's what fits.</p>
     </div>
     <div class="ledger">
-      <div class="row"><div class="k">Where</div><div class="v">Texas — local &amp; main-street</div></div>
-      <div class="row"><div class="k">What</div><div class="v">Retail in the health industry — with loyal, repeat customers</div></div>
-      <div class="row"><div class="k">Revenue</div><div class="v"><span class="num">$1M – $3M</span> annual revenue</div></div>
+      <div class="row"><div class="k">Where</div><div class="v">Texas — local &amp; independent</div></div>
+      <div class="row"><div class="k">What</div><div class="v">Home-service businesses — with loyal, repeat customers</div></div>
+      <div class="row"><div class="k">Revenue</div><div class="v"><span class="num">$1M – $7M</span> annual revenue</div></div>
       <div class="row"><div class="k">Shape</div><div class="v">Profitable, established, with a real track record</div></div>
     </div>
     <p class="fit-note">Not sure whether you fit? <a href="#contact">Reach out anyway</a> — I'll tell you straight, and it stays between us.</p>
@@ -396,10 +396,11 @@
               <select id="revenue" name="revenue" required>
                 <option value="" selected disabled>Select a range</option>
                 <option>Under $1M</option>
-                <option>$1M – $1.5M</option>
-                <option>$1.5M – $2M</option>
-                <option>$2M – $3M</option>
-                <option>Over $3M</option>
+                <option>$1M – $2M</option>
+                <option>$2M – $3.5M</option>
+                <option>$3.5M – $5M</option>
+                <option>$5M – $7M</option>
+                <option>Over $7M</option>
               </select>
             </div>
           </div>
@@ -441,20 +442,27 @@
   /* ============================================================
      LEAD DELIVERY CONFIG  — this is the only part you need to edit.
 
-     mode: "relay"        -> POST to your own relay URL (RECOMMENDED).
-                             Use the Cloudflare Worker in slack-relay-worker.js.
-                             Keeps your Slack webhook private + confirms delivery.
-     mode: "slack-direct" -> POST straight to a Slack Incoming Webhook.
-                             No extra service, but the webhook URL is PUBLIC in
-                             this file (spam risk) and success can't be confirmed.
-     mode: "" / unset     -> Falls back to opening a pre-filled email to Julian,
-                             so the form still works before you set anything up.
+     mode: "apps-script"  -> POST to a free Google Apps Script (RECOMMENDED).
+                             Drops every lead into a Google Sheet AND (optionally)
+                             pings Slack. All inside your Google account, no other
+                             service needed. Setup: see google-apps-script.gs.
+     mode: "relay"        -> POST to a Cloudflare Worker (slack-relay-worker.js).
+                             Slack only, with confirmed delivery.
+     mode: "slack-direct" -> POST straight to a Slack Incoming Webhook. No extra
+                             service, but the webhook URL is PUBLIC in this file
+                             (spam risk) and success can't be confirmed.
+     mode: "" / unset     -> Opens a pre-filled email to Julian, so the form still
+                             works before you set anything up.
 
      Whatever you choose, if delivery fails the form falls back to email so a
      lead is never silently lost.
+
+     >>> TO GO LIVE: follow google-apps-script.gs, paste your Web App URL into
+         appsScriptUrl below, and set mode to "apps-script". <<<
      ============================================================ */
   var LEAD_CONFIG = {
-    mode: "",                              // "relay"  |  "slack-direct"  |  ""
+    mode: "apps-script",                   // "apps-script" | "relay" | "slack-direct" | ""
+    appsScriptUrl: "",                     // paste your Google Apps Script Web App URL here
     relayUrl: "",                          // e.g. "https://reachjulian-slack.<you>.workers.dev"
     slackWebhook: "",                      // only if mode === "slack-direct"
     fallbackEmail: "julian@reachjulian.com"
@@ -530,6 +538,19 @@
       submitBtn.textContent = 'Sending…';
 
       var done = function(){ submitBtn.disabled = false; submitBtn.textContent = 'Send Julian a note'; };
+
+      // apps-script: POST to Google Apps Script (appends to Sheet + optional Slack).
+      // Uses no-cors + text/plain to avoid a preflight Apps Script can't answer;
+      // delivery works but the response is opaque, so we confirm optimistically.
+      if (LEAD_CONFIG.mode === 'apps-script' && LEAD_CONFIG.appsScriptUrl){
+        fetch(LEAD_CONFIG.appsScriptUrl, {
+          method:'POST', mode:'no-cors',
+          headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+          body: JSON.stringify(d)
+        }).then(function(){ showSuccess(); }).catch(function(){ mailtoFallback(d); showSuccess(); })
+          .finally(done);
+        return;
+      }
 
       // slack-direct: fire-and-forget (can't read response due to CORS)
       if (LEAD_CONFIG.mode === 'slack-direct' && LEAD_CONFIG.slackWebhook){
